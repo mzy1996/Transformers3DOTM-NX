@@ -1,0 +1,51 @@
+# ============================================================
+# T3DOTM-NX 源码仓库排除清单
+# 原则：只入库移植层源码、构建配置、工具脚本与交付文档；
+#       游戏数据、构建产物、vendored 依赖、日志与交付包一律不入库。
+# ============================================================
+
+# ---- 游戏原始素材与提取/修补产物（版权数据，不入库）----
+game/
+extracted/
+patched/
+patched_flat.bin
+update/
+*.xex
+*.xexp
+*.xbe
+
+# ---- 构建与代码生成产物 ----
+out/
+recomp/out/
+recomp/generated/
+repos/nfsmw-nx/sdk/out/
+repos/nfsmw-nx/sdk/thirdparty/
+.ninja_log
+.ninja_deps
+build/
+
+# ---- 可执行/中间产物 ----
+*.nro
+*.nso
+*.nsp
+*.elf
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+
+# ---- 交付包、日志与备份 ----
+*.zip
+*.7z
+*.tar.gz
+*.log
+*.bak
+*.bak-*
+*.fix*.bak
+.dumate/
+
+# ---- Python 缓存 ----
+__pycache__/
+*.pyc

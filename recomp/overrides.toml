@@ -1,0 +1,214 @@
+# ============================================================================
+#  T3DOTM Recomp - manual declarations for the codegen
+#
+#  Included from T3DOTM_manifest.toml via includes = ["overrides.toml"].
+#  Included files use the flat schema (sections at the root), not the one
+#  nested under [entrypoint] in the manifest.
+#
+#  First batch (17 entries) were dumped from game/default.xex (base XEX,
+#  before TU patch). All are UE3 engine dispatch/trampoline-table entries
+#  confirmed as real PPC code by tools/xex_dump.py:
+#    - b target; 0x00000000  trampoline table entries (8-byte slots)
+#    - 4E800020 (blr)        empty/null callbacks
+#    - lwz r11,0(r3); lwz r10,off(r11); mtspr ctr; bctr   UE3 virtual dispatch
+#  Second batch (21 entries) come from patched/default.xex (TU-applied XEX,
+#  now the codegen entrypoint): unresolved branch targets reported by
+#  phase_validate, confirmed as real PPC code by tools/xex_dump.py.
+#  Sizes are conservative (cover the visible dispatch tail); discover() may
+#  extend the node beyond the declared size, per rexglue phase_validate.
+# ============================================================================
+
+[functions]
+"0x83287440" = { size = 0x40 }
+"0x830E8EC8" = { size = 0x20 }
+"0x827DB8C0" = { size = 0x40 }
+"0x827DB6C8" = { size = 0x38 }
+"0x827DB7A0" = { size = 0x40 }
+"0x83171570" = { size = 0x40 }
+"0x82786940" = { size = 0x40 }
+"0x831AD3A8" = { size = 0x30 }
+"0x82E34670" = { size = 0x40 }
+"0x83287330" = { size = 0x50 }
+"0x827DB468" = { size = 0x40 }
+"0x827DB590" = { size = 0x30 }
+"0x827DB5C8" = { size = 0x8 }
+"0x827DD0A0" = { size = 0x8 }
+"0x830E8EE8" = { size = 0x28 }
+# TU-applied patched/default.xex: unresolved branch targets (batch 2)
+"0x832874D4" = { size = 0x40 }
+"0x83288C80" = { size = 0x40 }
+"0x8326A2E0" = { size = 0x40 }
+"0x83269FF8" = { size = 0x40 }
+"0x830E9A88" = { size = 0x40 }
+"0x827DBB70" = { size = 0x38 }
+"0x830EB808" = { size = 0x40 }
+"0x827DD680" = { size = 0x40 }
+"0x83288D40" = { size = 0x40 }
+"0x831AF928" = { size = 0x40 }
+"0x82E35860" = { size = 0x40 }
+"0x83173248" = { size = 0x40 }
+"0x83288E50" = { size = 0x40 }
+"0x82786A10" = { size = 0x40 }
+"0x83285F20" = { size = 0x40 }
+"0x827DBCA8" = { size = 0x38 }
+"0x83172DD0" = { size = 0x40 }
+"0x83173360" = { }
+"0x83173380" = { }
+"0x831733D0" = { }
+"0x83173730" = { }
+"0x83173738" = { }
+"0x83173740" = { }
+"0x83173748" = { }
+"0x83173750" = { }
+"0x83173758" = { }
+"0x83173760" = { }
+"0x83173768" = { }
+"0x83173770" = { }
+"0x83173778" = { }
+"0x83173780" = { }
+"0x83173788" = { }
+"0x83173790" = { }
+"0x83173798" = { }
+"0x831737A0" = { }
+"0x831737A8" = { }
+"0x831737B0" = { }
+"0x831737B8" = { }
+"0x831737C0" = { }
+"0x831737C8" = { }
+"0x831737D0" = { }
+"0x831737D8" = { }
+"0x831737E0" = { }
+"0x831737E8" = { }
+"0x831737F0" = { }
+# TU-applied patched/default.xex: deeper unresolved targets (batch 3)
+"0x827DBBA8" = { size = 0x40 }
+"0x827DBEA0" = { size = 0x40 }
+"0x827DBD80" = { size = 0x40 }
+"0x832F5CBC" = { size = 0x40 }
+"0x827DBA48" = { size = 0x40 }
+"0x827DBCE0" = { size = 0x40 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 4),
+# confirmed by switch FATAL at 0x82D370E8; sits between sub_82D370D0 (ends
+# 0xE8) and sub_82D37118 (starts 0x118), size 0x30 covers the dispatch tail.
+"0x82D370E8" = { size = 0x30 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 5),
+# confirmed by switch FATAL at 0x82D7B6E8; PPC function prologue at patched xex.
+"0x82D7B6E8" = { size = 0x40 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 6),
+# confirmed by switch FATAL at 0x82D88580; PPC function prologue at patched xex.
+"0x82D88580" = { size = 0x40 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 7),
+# confirmed by switch FATAL at 0x8361F348; PPC function prologue at patched xex.
+# Extended to 0x60 to cover internal branch target 0x8361F3A4 (discovered by validate).
+"0x8361F348" = { size = 0x60 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 8),
+# confirmed by switch FATAL at 0x82AF9408; PPC function prologue at patched xex.
+# Size reduced to 0x08 to avoid overlap with 0x82AF9410 (discovered by runtime FATAL).
+"0x82AF9408" = { size = 0x08 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 9),
+# confirmed by switch FATAL at 0x82AF9410; PPC function prologue at patched xex.
+"0x82AF9410" = { size = 0x40 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 10),
+# confirmed by switch FATAL at 0x828023B0; PPC function prologue at patched xex.
+# Size 0x70 covers internal branch target 0x82802418 seen in validate warnings.
+"0x828023B0" = { size = 0x70 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 11),
+# confirmed by switch FATAL at 0x832C5420; PPC function prologue at patched xex.
+"0x832C5420" = { size = 0xC0 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 12),
+# confirmed by switch FATAL at 0x826D6A00; PPC function prologue at patched xex.
+"0x826D6A00" = { size = 0x40 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 13),
+# confirmed by switch FATAL at 0x832CC0B8; PPC function prologue at patched xex.
+"0x832CC0B8" = { size = 0x40 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 14),
+# confirmed by switch FATAL at 0x8328B5C8; 12-byte this-adjustment thunk
+# (addi r5,r5,-16; addi r3,r3,-16; b 0x8322FA74) sitting between registered
+# sub_8328B5C0 (ends 0xC8) and sub_8328B5D8 (starts 0xD8). Size 0x10 covers
+# the thunk plus padding, same pattern as batch 8's 0x82AF9408 = 0x08.
+"0x8328B5C8" = { size = 0x10 }
+# TU-applied patched/default.xex: runtime indirect-dispatch target (batch 15),
+# confirmed by switch FATAL at 0x8255B3D8; PPC function prologue
+# (mr r4,r3; cmpwi r3,0; beqlr; lis/lwz vtable dispatch; bctr)
+# sitting between registered sub_8255B388 (ends ~0x8255B3A8) and
+# sub_8255B400 (starts 0x8255B400). Size 0x28 covers the dispatch tail.
+"0x8255B3D8" = { size = 0x28 }
+# TU-applied patched/default.xex: branch target "b 0x830EA378" from 0x83269FB8
+# (tail call into function-A body at 0x830EA368). Must stay declared so
+# phase_validate resolves the branch; kept as its own registered node.
+"0x830EA378" = { size = 0x40 }
+# Batch 17: indirect-dispatch target at 0x831735B0 (unregistered function FATAL).
+# Sits inside sub_831733D0 range; declared as empty so Discover splits it out.
+"0x831735B0" = { }
+# Batch 19: runtime indirect-dispatch target at 0x833CF038 (unregistered function FATAL).
+# Confirmed by switch FATAL logs. PPC prologue at patched xex (cmpli).
+# Size 0x14 covers the function body up to next registered function 0x833CF04C.
+"0x833CF038" = { size = 0x14 }
+# Batch 20: runtime indirect-dispatch target at 0x8334D6A0 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 22). Sits between registered
+# sub_8334D670 and sub_8334D6C0. Size 0x20 covers the function body up to
+# next registered function 0x8334D6C0.
+"0x8334D6A0" = { size = 0x20 }
+# Batch 21: runtime indirect-dispatch target at 0x832F7068 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 23). Sits between registered
+# sub_832F7058 (ends 0x832F7068) and sub_832F7070. Size 0x08 covers the
+# function body up to next registered function 0x832F7070.
+"0x832F7068" = { size = 0x08 }
+# Batch 22: runtime indirect-dispatch target at 0x8334D5C8 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 24). Sits between registered
+# sub_8334D5B0 (ends 0x8334D5C8) and sub_8334D5E0. Size 0x18 covers the
+# function body up to next registered function 0x8334D5E0.
+"0x8334D5C8" = { size = 0x18 }
+# Batch 23: runtime indirect-dispatch target at 0x833D6FC8 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 25). Sits between registered
+# sub_833D6FB0 (ends 0x833D6FC8) and sub_833D6FE8. Size 0x20 covers the
+# function body up to next registered function 0x833D6FE8.
+"0x833D6FC8" = { size = 0x20 }
+# Batch 24: unresolved branch targets inside large function sub_832F5648.
+# Confirmed by switch FATAL logs (round 26): "Unresolved branch from
+# 0x832F5838 to 0x832F5840" plus internal targets 0x832F583C/0x832F5888/
+# 0x832F5890/0x832F59C0/0x832F58D8. sub_832F5648 is a big function that was
+# never declared with a size, so codegen saw its interior branch targets as
+# unknown. Declared empty so Discover extends the node to the next registered
+# function 0x832F5CBC. The former inner declarations 0x832F5810 (thin b
+# 0x832F5884 shim) and 0x832F5884 were removed: keeping either a size or an
+# empty node inside the span either overlaps the parent or splits the parent
+# so Discover loses the interior targets again. Discover now folds both into
+# sub_832F5648 and resolves 0x832F5814/0x832F5884/0x832F59C0/... as labels.
+"0x832F5648" = { }
+# Batch 25: runtime indirect-dispatch target at 0x82E869A0 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 27/28: T3DOTM_001(34), T3DOTM_002(32)).
+# Sits between registered sub_82E86990 (ends 0x82E869A0) and 4-byte blr stub
+# sub_82E869C0. PPC thunk at patched/default.xex: addis/addi builds address
+# 0x821696C8, stw through r1+116, epilogue + blr. Size 0x20 covers the thunk
+# body up to next registered function 0x82E869C0.
+"0x82E869A0" = { size = 0x20 }
+# Batch 26: runtime indirect-dispatch target at 0x827DC208 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 29: T3DOTM_001(35), T3DOTM_002(33)).
+# Sits between registered sub_827DC1D8 (ends 0x827DC208) and sub_827DC2D8.
+# PPC code at patched/default.xex 0x827DC208: standalone "blr" stub (empty
+# virtual method / dispatch table slot) followed by 4-byte alignment. Size 0x04
+# covers the single blr; next registered function is 0x827DC2D8.
+"0x827DC208" = { size = 0x04 }
+# Batch 27: runtime indirect-dispatch target at 0x831735C0 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 30/31: T3DOTM_001(36), T3DOTM_002(34)).
+# Sits between registered vtable thunk sub_831735B0 (0x831735B0, 12 bytes ending
+# in bctr) and sub_831735E0 (0x831735E0). PPC code at patched/default.xex 0x831735C0
+# is a real loop body (addi r29,r29,4 / bc back to 0x831733A8 / branch to 0x83173670),
+# reached through an indirect dispatch slot. Size 0x20 covers up to next registered
+# function 0x831735E0.
+"0x831735C0" = { size = 0x20 }
+# Batch 30: runtime indirect-dispatch target at 0x831F6BD0 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 36/37: T3DOTM_001(39), T3DOTM_002(37)).
+# PPC code at patched/default.xex: the real function entry is at 0x831F6B98,
+# but the indirect dispatch slot points into the body at 0x831F6BD0
+# (lis r28, 0x83A1 ... cmplw / beq). blr at 0x831F6CCC.
+# Size 0x18 covers up to (but not including) the next dispatch target at 0x831F6BE8,
+# avoiding Overlapping boundaries with Batch 31.
+"0x831F6BD0" = { size = 0x18 }
+
+# Batch 31: runtime indirect-dispatch target at 0x831F6BE8 (unregistered function FATAL).
+# Confirmed by switch FATAL logs (round 38/39: T3DOTM_001(40), T3DOTM_002(38)).
+# Same physical function as Batch 30. Dispatch slot points to 0x831F6BE8 (mr r3, r30).
+# Size 0xE4 covers from this internal target to the function return at 0x831F6CCC.
+"0x831F6BE8" = { size = 0xE4 }

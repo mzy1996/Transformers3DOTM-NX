@@ -1,0 +1,17 @@
+# T3DOTM - ReXGlue manifest for Transformers: Dark of the Moon (Xbox 360)
+#
+# game_root = "../game" is the extracted ISO (default.xex + TransGame data).
+# update_data_root is passed on the command line (../update) so the TU patch
+# default.xexp is found as the sibling of default.xex and applied at runtime
+# during XEX load (layered VFS, update > game). See recomp/codegen_t3dotm.sh.
+
+[project]
+name = "T3DOTM"
+sdk_version = "0.10.0"
+game_root = ".."
+
+[entrypoint]
+file_path = "../patched/default.xex"
+out_directory_path = "generated/default"
+includes = ["overrides.toml"]
+template_dir = "templates"
