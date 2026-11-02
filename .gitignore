@@ -49,3 +49,12 @@ build/
 # ---- Python 缓存 ----
 __pycache__/
 *.pyc
+
+# ---- repos/ 下仅保留本工程的移植层（nfsmw-nx/sdk），其余为参考克隆与工具仓库 ----
+repos/*
+!repos/nfsmw-nx/
+repos/nfsmw-nx/*
+!repos/nfsmw-nx/sdk/
+
+# ---- 本机测试用模拟器/工具二进制 ----
+tools/xenia-canary/
